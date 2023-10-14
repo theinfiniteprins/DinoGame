@@ -6,6 +6,13 @@ document.addEventListener("keydown", function (e) {
     }
 });
 
+let highScore = 0;
+// Load high score from local storage
+const storedHighScore = localStorage.getItem("highScore");
+if (storedHighScore) {
+  highScore = parseInt(storedHighScore);
+}
+
 //board
 let board;
 let boardWidth = 750;
@@ -119,13 +126,13 @@ function update() {
     context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
 
     //cactus
-    for (let i = 0; i < cactusArray.length; i++) {
+    for (let i =  0; i < cactusArray.length; i++) {
         let cactus = cactusArray[i];
         cactus.x += velocityX;
         context.drawImage(cactus.img, cactus.x, cactus.y, cactus.width, cactus.height);
         if(cactus.img == coinImg && detectCollision(dino, cactus) )
         {
-            cactus.img = blank;
+            cactus.img = blank; 
             coincounter++;
             playoncollect();
         }
@@ -152,7 +159,20 @@ function update() {
     // `Score: ${Math.trunc(score / 10)}`
     context.fillText(`Score: ${Math.trunc(score / 10)}`, 5, 20, 100);
 
-    //coincount
+    // Check and update high score
+if (score > highScore) {
+    highScore = score;
+    // Update the high score in local storage
+    localStorage.setItem("highScore", highScore);
+  }
+
+  
+  context.fillStyle = "black";
+context.font = "20px courier";
+context.fillText(`High Score: ${Math.trunc(highScore/10)}`, boardWidth -475, 20);
+
+
+    // coincount
     context.fillStyle = "black";
     context.font = "20px courier";
     context.fillText(`Coins: ${Math.trunc(coincounter)}`, boardWidth - 125, 20);
