@@ -1,4 +1,4 @@
-
+//For pausing the game
 let isPaused = false;
 document.addEventListener("keydown", function (e) {
     if (e.key === "p" || e.key === "P") {
@@ -111,16 +111,17 @@ function update() {
         return;
     }
     soundctr++;
+    // Playing sound of beep at every 1000ms 
     if (soundctr >= onsound) {
         play();
         onsound += 1000;
         velocityX--;
     }
     
-   
+    // for clearing board at every ms 
     context.clearRect(0, 0, board.width, board.height);
     context.drawImage(path,0,220,750,30);
-    //dino
+
     velocityY += gravity;
     dino.y = Math.min(dino.y + velocityY, dinoY);
     context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
@@ -145,6 +146,7 @@ function update() {
                     context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
                 }
             }
+            // if game is finished than play end game music
             endplay();
             let endimg = new Image();
             endimg.src = "./img/game-over.png";
@@ -156,7 +158,7 @@ function update() {
     context.fillStyle = "black";
     context.font = "20px courier";
     score++;
-    // `Score: ${Math.trunc(score / 10)}`
+    // For better view we have used Math.trunc(score / 10) 
     context.fillText(`Score: ${Math.trunc(score / 10)}`, 5, 20, 100);
 
     // Check and update high score
@@ -166,7 +168,7 @@ if (score > highScore) {
     localStorage.setItem("highScore", highScore);
   }
 
-  
+  // Printing High score 
   context.fillStyle = "black";
 context.font = "20px courier";
 context.fillText(`High Score: ${Math.trunc(highScore/10)}`, boardWidth -475, 20);
@@ -177,12 +179,15 @@ context.fillText(`High Score: ${Math.trunc(highScore/10)}`, boardWidth -475, 20)
     context.font = "20px courier";
     context.fillText(`Coins: ${Math.trunc(coincounter)}`, boardWidth - 125, 20);
 
+    //checking for response of user 
     document.addEventListener("keydown", moveDino);
     document.addEventListener("keyup", refres);
     document.addEventListener("click", moveDino1);
 }
 
 let isDown = false;
+
+// All music playing functions 
 function play() {
     let beepsound = new Audio("./Sound/Beep.mp3");
     beepsound.play();
@@ -203,6 +208,7 @@ function playoncollect() {
     beepsound.play();
 }
 
+
 function refres() {
     if(!gameOver && isDown)
     dinoImg = getImg();
@@ -214,6 +220,8 @@ function refres() {
 function reload() {
     location.reload();
 }
+
+// Dino moving functions 
 function moveDino1() {
     if (gameOver) {
         return;
@@ -268,6 +276,7 @@ function getImg()
 }
 setInterval(getImg,100);
 
+// For Placing Cactus
 function placeCactus() {
     if (gameOver) {
         let endimg = new Image();
@@ -288,22 +297,22 @@ function placeCactus() {
 
     let placeCactusChance = Math.random(); //0 - 0.9999...
 
-    if (placeCactusChance > .85) {
+    if (placeCactusChance > .85) {   // 15% chance
         cactus.img = cactus3Img;
         cactus.width = cactus3Width;
         cactusArray.push(cactus);
     }
-    else if (placeCactusChance > .65) { 
+    else if (placeCactusChance > .65) { // 20% chance 
         cactus.img = cactus2Img;
         cactus.width = cactus2Width;
         cactusArray.push(cactus);
     }
-    else if (placeCactusChance > .45) { //80% you get cactus1
+    else if (placeCactusChance > .45) { // 20% chance
         cactus.img = cactus1Img;
         cactus.width = cactus1Width;
         cactusArray.push(cactus);
     }
-    else if(placeCactusChance > .20)
+    else if(placeCactusChance > .20) // 25% chance 
     {
         cactus.img = coinImg;
         cactus.width = coinWidth;
